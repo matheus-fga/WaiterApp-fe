@@ -9,7 +9,7 @@ export const Container = styled.div`
   border: 1px solid rgba(204, 204, 204, 0.4);
   border-radius: 16px;
 
-  .orders_board_header {
+  .orders-board-header {
     display: flex;
     gap: 8px;
     align-items: center;
