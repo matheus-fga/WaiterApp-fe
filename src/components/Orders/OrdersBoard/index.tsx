@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { Container } from './styles';
 
@@ -38,6 +39,7 @@ export function OrdersBoard ({ icon, title, orders, onCancelOrder }: OrdersBoard
     });
     await api.delete(`/orders/${selectedOrder?._id}`);
 
+    toast.success(`O pedido da mesa ${selectedOrder?.table} foi cancelado`);
     setIsLoading(false);
     onCancelOrder(selectedOrder!._id);
     handleCloseModal();
