@@ -126,6 +126,11 @@ export const Actions = styled.div`
   gap: 16px;
   margin-top: 32px;
 
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .primary-button {
     display: flex;
     align-items: center;
