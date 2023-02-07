@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import sockerIo from 'socket.io-client';
 
 import { Container } from './styles';
 
@@ -10,6 +11,16 @@ import { Order } from '../../types/Order';
 
 export function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    const socket = sockerIo('http://192.168.0.28:3001', {
+      transports: ['websocket'],
+    });
+
+    socket.on('orders@new', (order: Order) => {
+      setOrders((prevState) => prevState.concat(order));
+    });
+  }, []);
 
   useEffect(() => {
     api.get('/orders')
