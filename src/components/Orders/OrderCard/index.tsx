@@ -11,7 +11,10 @@ export function OrderCard({ order, onOpenModal }: OrderCardProps) {
     <Container>
       <button type='button' onClick={() => onOpenModal(order)}>
         <strong>Mesa {order.table}</strong>
-        <span>{order.products.length} itens</span>
+        <span>
+          {order.products.length}
+          {order.products.length === 1 ? ' item' : ' itens'}
+        </span>
       </button>
     </Container>
   );
