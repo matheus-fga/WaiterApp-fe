@@ -3,15 +3,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { GlobalStyles } from './styles/GlobalStyles';
 
-import { Header } from './components/Header';
-import { Orders } from './components/Orders';
+import Home from './pages/Home';
 
 export function App() {
   return (
     <>
       <GlobalStyles />
-      <Header />
-      <Orders />
+      <Home />
       <ToastContainer position="bottom-center" />
     </>
   );
