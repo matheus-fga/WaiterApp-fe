@@ -13,9 +13,10 @@ export default function InputWithAction({ children, onClick, ActionIconPath }: I
   return (
     <Container>
       {children}
+
       <div className="action-button-container">
         <button type="button" onClick={onClick}>
-          <img src={ActionIconPath} alt="ícone de toogle" />
+          <img src={ActionIconPath} alt="ícone de toggle" />
         </button>
       </div>
     </Container>

@@ -5,3 +5,7 @@ export const Form = styled.form`
   width: 100%;
   max-width: 384px;
 `;
+
+export const ButtonContainer = styled.div`
+  margin-top: 40px;
+`;
