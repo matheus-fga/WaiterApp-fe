@@ -11,8 +11,8 @@ export const Button = styled.button`
   transition: background 0.15s ease-in;
 
   &:disabled {
-    cursor: default;
-    background: #cccccc;
+    cursor: default !important;
+    background: #cccccc !important;
   }
 
   &:hover {
