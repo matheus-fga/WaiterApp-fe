@@ -5,20 +5,25 @@ import { Container } from './styles';
 interface InputWithActionProps {
   children: ReactNode
   onClick: () => void
-  ActionIconPath: string
+  actionIconPath: string
+  actionEnableCondition: boolean
 }
 
 
-export default function InputWithAction({ children, onClick, ActionIconPath }: InputWithActionProps) {
+export default function InputWithAction({
+  children, onClick, actionIconPath, actionEnableCondition }: InputWithActionProps
+){
   return (
     <Container>
       {children}
 
-      <div className="action-button-container">
-        <button type="button" onClick={onClick}>
-          <img src={ActionIconPath} alt="ícone de toggle" />
-        </button>
-      </div>
+      {actionEnableCondition && (
+        <div className="action-button-container">
+          <button type="button" onClick={onClick}>
+            <img src={actionIconPath} alt="ícone clicável" />
+          </button>
+        </div>
+      )}
     </Container>
   );
 }

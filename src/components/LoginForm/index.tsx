@@ -29,7 +29,7 @@ export default function LoginForm() {
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value);
 
-    if (isEmailValid(email)) {
+    if (!event.target.value || isEmailValid(email)) {
       setEmailError('');
     }
   }
@@ -72,7 +72,8 @@ export default function LoginForm() {
       >
         <InputWithAction
           onClick={handlePasswordHiddenToggle}
-          ActionIconPath={currentEyeIcon}
+          actionIconPath={currentEyeIcon}
+          actionEnableCondition={!!password}
         >
           <Input
             value={password}
