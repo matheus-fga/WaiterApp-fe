@@ -3,12 +3,13 @@ import { Button } from './styles';
 
 interface PrimaryButtonProps {
   children: ReactNode
+  onClick?: () => void
   isDisabled?: boolean
 }
 
-export default function PrimaryButton({ children, isDisabled }: PrimaryButtonProps) {
+export default function PrimaryButton({ children, onClick, isDisabled }: PrimaryButtonProps) {
   return (
-    <Button disabled={isDisabled} >
+    <Button onClick={onClick} disabled={isDisabled} >
       {children}
     </Button>
   );
