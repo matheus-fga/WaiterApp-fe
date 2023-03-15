@@ -9,8 +9,9 @@ export const Button = styled.button`
   border: 0;
   font-weight: 600;
   font-size: 16px;
-  padding: 12px 24px;
+  padding: 14px 0;
   color: #d73035;
+  white-space: nowrap;
 
   img {
     filter: invert(29%) sepia(38%) saturate(4069%) hue-rotate(338deg) brightness(86%) contrast(96%);
@@ -22,6 +23,11 @@ export const Button = styled.button`
     img {
       filter: invert(72%) sepia(97%) saturate(1748%) hue-rotate(306deg) brightness(125%) contrast(115%);
     }
+  }
+
+  &:disabled {
+    color: #cccccc !important;
+    cursor: default !important;
   }
 
   &:active {
