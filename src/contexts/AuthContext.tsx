@@ -13,7 +13,7 @@ interface AuthContextType {
   authenticated: boolean
   loggedUser: User | null
   handleLogin: (params: UserLoginParams) => Promise<void>
-  handleLogout: () => Promise<void>
+  handleLogout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);

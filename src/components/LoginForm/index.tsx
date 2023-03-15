@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import useAuthContext from '../../hooks/useAuthContext';
 
 import FormGroup from '../FormGroup';
 import { Input } from '../Input';
@@ -10,6 +13,8 @@ import isEmailValid from '../../utils/isEmailValid';
 import eyeIcon from '../../assets/images/eye-icon.svg';
 import eyeHiddenIcon from '../../assets/images/eye-hidden-icon.svg';
 
+import { requestError } from '../../types/requestError';
+
 import { Form, ButtonContainer } from './styles';
 
 export default function LoginForm() {
@@ -18,6 +23,8 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const { handleLogin } = useAuthContext();
 
   const isFormValid = ((email && isEmailValid(email)) && password);
 
@@ -29,7 +36,7 @@ export default function LoginForm() {
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value);
 
-    if (!event.target.value || isEmailValid(email)) {
+    if (!event.target.value || isEmailValid(event.target.value)) {
       setEmailError('');
     }
   }
@@ -37,18 +44,36 @@ export default function LoginForm() {
   function handleEmailBlur(event: React.FocusEvent<HTMLInputElement>) {
     if (event.target.value && !isEmailValid(email)) {
       setEmailError('Endereço de e-mail inválido');
-    } else {
-      setEmailError('');
     }
   }
 
   function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPassword(event.target.value);
+    setPasswordError('');
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    alert('Fazendo Login...');
+
+    try {
+      await handleLogin({ email, password });
+
+    } catch (error) {
+      const axiosError = error as AxiosError;
+
+      if(axiosError.response?.status === 400) {
+        const { error } = axiosError.response.data as requestError;
+
+        if (error.includes('Usuário')) {
+          setEmailError('E-mail não cadastrado. Informe ao administrador');
+        } else if (error.includes('Senha')) {
+          setPasswordError('Senha incorreta. Tente novamente');
+        }
+
+      } else {
+        toast.error('Ocorreu um erro no servidor. Tente novamente mais tarde!');
+      }
+    }
   }
 
   return (
@@ -68,7 +93,7 @@ export default function LoginForm() {
       </FormGroup>
       <FormGroup
         label="Senha"
-        error={undefined}
+        error={passwordError}
       >
         <InputWithAction
           onClick={handlePasswordHiddenToggle}
@@ -80,7 +105,7 @@ export default function LoginForm() {
             type={passwordInputType}
             placeholder="Informe sua senha"
             onChange={handlePasswordChange}
-            error={undefined}
+            error={passwordError}
           />
         </InputWithAction>
       </FormGroup>

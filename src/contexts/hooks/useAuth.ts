@@ -36,12 +36,12 @@ export default function useAuth() {
     setAuthenticated(true);
 
     const from = location.state?.from?.pathname
-      || user.role === Roles.ADMIN ? '/dashboard' : '/home';
+      || (user.role === Roles.ADMIN ? '/dashboard' : 'home');
 
     navigate(from, { replace: true });
   }
 
-  async function handleLogout() {
+  function handleLogout() {
     setAuthenticated(false);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
