@@ -1,9 +1,8 @@
-import { Overlay, ModalBody, OrderDetails, Actions } from './styles';
-
-import closeIcon from '../../assets/images/close-icon.svg';
+import { OrderStatus, OrderDetails } from './styles';
 
 import { Order } from '../../types/Order';
 import { formatCurrency } from '../../utils/formatCurrency';
+import ModalBody from '../ModalBody';
 
 interface OrderModalProps {
   visible: boolean;
@@ -29,88 +28,71 @@ export function OrderModal({
   ), 0);
 
   return (
-    <Overlay>
-      <ModalBody>
-        <div className="modal-header">
-          <strong>Mesa {order.table}</strong>
-          <button type="button" onClick={onClose}>
-            <img src={closeIcon} alt="icone para fechar o modal" />
-          </button>
+    <ModalBody
+      title={`Mesa ${order.table}`}
+      onclose={onClose}
+      primaryAction={
+        order.status !== 'DONE'
+          ? {
+            label: `${order.status === 'WAITING' ? 'Iniciar Produção' : 'Concluir Pedido'}`,
+            onClick: onChangeOrderStatus,
+            disableCondition: isLoading
+          }
+          : undefined
+      }
+      secondaryAction={{
+        label: 'Cancelar Pedido',
+        onClick: onCancelOrder,
+        disableCondition: isLoading
+      }}
+    >
+
+      <OrderStatus>
+        <small>Status do Pedido</small>
+        <div className="current-status">
+          <span>
+            {order.status === 'WAITING' && '🕑'}
+            {order.status === 'IN_PRODUCTION' && '👩‍🍳'}
+            {order.status === 'DONE' && '✅'}
+          </span>
+
+          <strong>
+            {order.status === 'WAITING' && 'Fila de espera'}
+            {order.status === 'IN_PRODUCTION' && 'Em produção'}
+            {order.status === 'DONE' && 'Pronto'}
+          </strong>
         </div>
+      </OrderStatus>
 
-        <div className="modal-status-container">
-          <small>Status do Pedido</small>
-          <div className="current-status">
-            <span>
-              {order.status === 'WAITING' && '🕑'}
-              {order.status === 'IN_PRODUCTION' && '👩‍🍳'}
-              {order.status === 'DONE' && '✅'}
-            </span>
+      <OrderDetails>
+        <strong>Itens</strong>
 
-            <strong>
-              {order.status === 'WAITING' && 'Fila de espera'}
-              {order.status === 'IN_PRODUCTION' && 'Em produção'}
-              {order.status === 'DONE' && 'Pronto'}
-            </strong>
-          </div>
-        </div>
+        <div className="order-items">
+          {order.products.map(({ _id, product, quantity }) => (
+            <div key={_id} className="item">
+              <img
+                src={`http://localhost:3001/uploads/${product.imagePath}`}
+                alt={`icone do item: ${product.name}`}
+                width="86"
+                height="44"
+              />
 
-        <OrderDetails>
-          <strong>Itens</strong>
+              <span className="quantity">{quantity}x</span>
 
-          <div className="order-items">
-            {order.products.map(({ _id, product, quantity }) => (
-              <div key={_id} className="item">
-                <img
-                  src={`http://localhost:3001/uploads/${product.imagePath}`}
-                  alt={`icone do item: ${product.name}`}
-                  width="86"
-                  height="44"
-                />
-
-                <span className="quantity">{quantity}x</span>
-
-                <div className="product-details">
-                  <strong>{product.name}</strong>
-                  <span>{formatCurrency(product.price)}</span>
-                </div>
+              <div className="product-details">
+                <strong>{product.name}</strong>
+                <span>{formatCurrency(product.price)}</span>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
-          <div className="total">
-            <span>Total</span>
-            <strong>{formatCurrency(totalPrice)}</strong>
-          </div>
-        </OrderDetails>
+        <div className="total">
+          <span>Total</span>
+          <strong>{formatCurrency(totalPrice)}</strong>
+        </div>
+      </OrderDetails>
 
-        <Actions>
-          {order.status !== 'DONE' && (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={onChangeOrderStatus}
-              disabled={isLoading}
-            >
-              <span>
-                {order.status === 'WAITING' ? '👩‍🍳' : '✅'}
-              </span>
-              <strong>
-                {order.status === 'WAITING' ? 'Iniciar Produção' : 'Concluir Pedido'}
-              </strong>
-            </button>
-          )}
-
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={onCancelOrder}
-            disabled={isLoading}
-          >
-            Cancelar pedido
-          </button>
-        </Actions>
-      </ModalBody>
-    </Overlay>
+    </ModalBody>
   );
 }
